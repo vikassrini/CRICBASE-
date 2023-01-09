@@ -9,6 +9,7 @@ from matches import Match
 from team import Team
 from tournament import Tournament
 from fielding_analysis import FieldingAnalysis
+from player_summary import PlayerSummary
 
 app = Flask(__name__)
 mysql = MySQL()
@@ -211,5 +212,12 @@ def delete_dismissal(match_id, batter_id):
     resp.status_code = 200
     return resp
 
+@app.route('/playerSummary/<int:player_id>')
+def get_player_summary(player_id):
+    conn = mysql.connect()
+    playerSummary = PlayerSummary.read_from_database(conn, player_id)
+    return playerSummary.to_json(),200
+
 if __name__ == '__main__':
     app.run(debug=True)
+
