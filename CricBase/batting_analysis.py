@@ -50,9 +50,3 @@ class BattingAnalysis:
         cursor = conn.cursor()
         cursor.execute('DELETE FROM BATTING_ANALYSIS WHERE PlayerID=%s AND MatchID=%s AND TeamID=%s', (player_id, match_id, team_id))
         conn.commit()
-
-    @staticmethod
-    def read_from_database(conn, player_id):
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM BATTING_ANALYSIS WHERE PlayerID=%s", (player_id))
-        return cursor.fetchall()
