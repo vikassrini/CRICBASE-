@@ -1,5 +1,4 @@
 import json
-import pymysql
 
 class BowlingAnalysis:
     def __init__(self, PlayerID, MatchID, TeamID, OversBowled, RunsConceded, Maidens, Wickets):
@@ -25,7 +24,7 @@ class BowlingAnalysis:
         return BowlingAnalysis(**data)
 
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent=4)
 
     @staticmethod
     def read_from_database(conn, player_id, match_id, team_id):
@@ -49,9 +48,5 @@ class BowlingAnalysis:
         cursor.execute('DELETE FROM BOWLING_ANALYSIS WHERE PlayerID=%s AND MatchID=%s AND TeamID=%s', (player_id, match_id, team_id))
         conn.commit()
 
-    @staticmethod
-    def read_from_database(conn, player_id):
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM BOWLING_ANALYSIS WHERE PlayerID=%s", (player_id))
-        return cursor.fetchall()
+
     

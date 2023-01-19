@@ -10,6 +10,10 @@ from team import Team
 from tournament import Tournament
 from fielding_analysis import FieldingAnalysis
 from player_summary import PlayerSummary
+from player_fielding_summary import PlayerFieldingSummary
+from player_bowling_summary import PlayerBowlingSummary
+from player_batting_summary import PlayerBattingSummary
+
 
 import mysql.connector
 from mysql.connector import errorcode
@@ -20,8 +24,8 @@ mysql = MySQL()
 
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = "root"
-app.config['MYSQL_DATABASE_PASSWORD'] = "awbo22Oct!"
-app.config['MYSQL_DATABASE_DB'] = 'CRICBASE'
+app.config['MYSQL_DATABASE_PASSWORD'] = "root123"
+app.config['MYSQL_DATABASE_DB'] = 'CRICO'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
@@ -367,10 +371,28 @@ def delete_dismissal(match_id, batter_id):
     resp.status_code = 200
     return resp
 
+@app.route('/player_fielding_summary/<int:player_id>', methods=['GET'])
+def get_player_fielding_summary(player_id):
+    conn = mysql.connect()
+    fieldingSummary = PlayerFieldingSummary.read_from_database(conn, player_id)
+    return fieldingSummary.to_json(), 200
+
+@app.route('/player_bowling_summary/<int:player_id>', methods=['GET'])
+def get_player_bowling_summary(player_id):
+    conn = mysql.connect()
+    summary = PlayerBowlingSummary.read_from_database(conn, player_id)
+    return summary.to_json(), 200
+
+@app.route('/player_batting_summary/<int:player_id>', methods=['GET'])
+def get_player_batting_summary(player_id):
+    conn = mysql.connect()
+    sum = PlayerBattingSummary.read_from_database(conn, player_id)
+    return sum.to_json(), 200
+
 @app.route('/playerSummary/<int:player_id>')
 def get_player_summary(player_id):
     conn = mysql.connect()
-    playerSummary = PlayerSummary.read_from_database(conn, player_id)
+    playerSummary = PlayerSummary.read_from_database(conn=conn, player_id=player_id)
     return playerSummary.to_json(),200
 
 if __name__ == '__main__':
