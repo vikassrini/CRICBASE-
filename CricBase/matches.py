@@ -30,7 +30,7 @@ class Match:
             return value.__dict__
 
     def to_json(self):
-        return json.dumps(self, default=self.json_default, sort_keys=True, indent=4)
+        return json.dumps(self, default=self.json_default, sort_keys=False, indent=4)
 
     @staticmethod
     def read_from_database(conn, match_id):

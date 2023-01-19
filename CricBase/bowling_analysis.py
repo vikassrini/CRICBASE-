@@ -1,6 +1,4 @@
 import json
-import pymysql
-from decimal import Decimal
 
 class BowlingAnalysis:
     def __init__(self, PlayerID, MatchID, TeamID, OversBowled, RunsConceded, Maidens, Wickets):
@@ -26,7 +24,7 @@ class BowlingAnalysis:
         return BowlingAnalysis(**data)
 
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent=4)
 
     @staticmethod
     def read_from_database(conn, player_id, match_id, team_id):
@@ -50,10 +48,5 @@ class BowlingAnalysis:
         cursor.execute('DELETE FROM BOWLING_ANALYSIS WHERE PlayerID=%s AND MatchID=%s AND TeamID=%s', (player_id, match_id, team_id))
         conn.commit()
 
-    # def json_default(self,value):
-    #     if isinstance(Decimal,value) :
-    #         return json.dumps(value, cls=DecimalEncoder)
-    #     else:
-    #         return value.__dict__
 
     
