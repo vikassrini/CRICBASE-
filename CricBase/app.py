@@ -1,5 +1,5 @@
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flaskext.mysql import MySQL
 from player import Player
 from batting_analysis import BattingAnalysis
@@ -14,9 +14,10 @@ from player_summary import PlayerSummary
 app = Flask(__name__)
 mysql = MySQL()
 
+
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = "root"
-app.config['MYSQL_DATABASE_PASSWORD'] = "root123"
+app.config['MYSQL_DATABASE_PASSWORD'] = "awbo22Oct!"
 app.config['MYSQL_DATABASE_DB'] = 'CRICBASE'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
