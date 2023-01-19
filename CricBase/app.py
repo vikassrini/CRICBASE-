@@ -1,5 +1,5 @@
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flaskext.mysql import MySQL
 from player import Player
 from batting_analysis import BattingAnalysis
@@ -15,8 +15,12 @@ from player_bowling_summary import PlayerBowlingSummary
 from player_batting_summary import PlayerBattingSummary
 
 
+import mysql.connector
+from mysql.connector import errorcode
+
 app = Flask(__name__)
 mysql = MySQL()
+
 
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = "root"
@@ -24,6 +28,157 @@ app.config['MYSQL_DATABASE_PASSWORD'] = "root123"
 app.config['MYSQL_DATABASE_DB'] = 'CRICO'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
+
+#front end
+#basic pages
+@app.route('/')
+def index():
+    return render_template('login.html')
+
+@app.route('/home_page')
+def home():
+    return render_template('home.html')
+@app.route('/view_info')
+def view_info():
+    return render_template('view_info.html')
+
+@app.route('/mod_info')
+def mod_info():
+    return render_template('mod_info.html')
+
+#the following methods are for displaying information 
+
+
+@app.route('/display_tournament')
+def disp_tourn():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from tournament"
+    column = ['TournamentID', 'TournamentName', 'StartYear', 'Grade', 'EndYear']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+
+@app.route('/display_team')
+def disp_team():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from team"
+    column = ['TeamID', 'Name', 'Division', 'Grade']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+
+@app.route('/display_player')
+def display_player():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from player"
+    column = ['PlayerID', 'FName', 'LName', 'DOB', 'PrimarySkill', 'SecondarySkill', 'BowlingArm', 'BattingHand', 'TeamID', 'DebutID']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+
+@app.route('/display_matches')
+def disp_matches():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from matches"
+    column = ["MatchID", 'TournamentID', 'TeamID1', 'TeamID2', 'Venue', 'DatePlayed']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+
+@app.route('/display_fielding_analysis')
+def disp_fielding_analysis():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from fielding_analysis"
+    column = ['PlayerID', 'MatchID', 'TeamID', 'Catches', 'Stumpings', 'RunOuts']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+    
+@app.route('/display_dismissal')
+def disp_dismissal():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from dismissal"
+    column = ['MatchID', 'BatterID', 'BowlerID', 'FielderID', 'NatureOfDismissal']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+    
+@app.route('/display_bowling_analysis')
+def disp_bowling_analysis():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from bowling_analysis"
+    column = ['MatchID', 'BatterID', 'BowlerID', 'FielderID', 'NatureOfDismissal']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+    
+@app.route('/display_batting_analysis')
+def disp_batting_analysis():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from batting_analysis"
+    column = ['PlayerID', 'MatchID', 'TeamID', 'BallsFaced', 'RunsScored', 'DismissalStatus', 'Fours', 'Sixes']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+    
+
+
 # player 
 @app.route('/player/<int:player_id>', methods=['GET'])
 def get_players(player_id):
