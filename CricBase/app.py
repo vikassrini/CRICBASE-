@@ -26,9 +26,7 @@ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
 #front end
-
-#the following methods are for displaying information 
-
+#basic pages
 @app.route('/')
 def index():
     return render_template('login.html')
@@ -36,6 +34,12 @@ def index():
 @app.route('/home_page')
 def home():
     return render_template('home.html')
+@app.route('/view_info')
+def view_info():
+    return render_template('view_info.html')
+
+#the following methods are for displaying information 
+
 
 @app.route('/display_tournament')
 def disp_tourn():
