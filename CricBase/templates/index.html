@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>My Flask App</title>
+  </head>
+  <body>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, tr , td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+      }
+    </style>
+    <h1>Query Results</h1>
+    <table>
+      
+      <tr>
+        {% for c in column %}
+          <th>{{ c }}</th>
+        {% endfor %}
+      </tr>
+      {% for row in rows %}
+        <tr>
+          {% for value in row %}
+            <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

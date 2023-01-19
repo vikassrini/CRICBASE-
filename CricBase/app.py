@@ -11,6 +11,9 @@ from tournament import Tournament
 from fielding_analysis import FieldingAnalysis
 from player_summary import PlayerSummary
 
+import mysql.connector
+from mysql.connector import errorcode
+
 app = Flask(__name__)
 mysql = MySQL()
 
@@ -21,6 +24,32 @@ app.config['MYSQL_DATABASE_PASSWORD'] = "awbo22Oct!"
 app.config['MYSQL_DATABASE_DB'] = 'CRICBASE'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
+
+#front end
+@app.route('/')
+def index():
+    return render_template('login.html')
+
+@app.route('/display_tournament')
+def disp_tourn():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    query = "select * from tournament"
+    column = ['TournamentID', 'TournamentName', 'StartYear', 'Grade', 'EndYear']
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+    #rows.append(column) 
+    cursor.close()
+    cnx.close()
+
+    return render_template('index.html', rows=rows , column =column)
+
+
+
+
+
 # player 
 @app.route('/player/<int:player_id>', methods=['GET'])
 def get_players(player_id):
