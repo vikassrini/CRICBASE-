@@ -118,13 +118,19 @@ input[type="submit"]:hover {
                 },
                 body: dat,
             })
-                .then((response) => response.json())
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Error sending JSON data to backend API");
+                }
+                })
                 .then((data) => {
-                // Handle the response from the backend API
-                console.log(data);
+                // Handle the success case
+                console.log("JSON data sent successfully:", data);
                 })
                 .catch((error) => {
-                // Handle any errors
+                // Handle the error case
                 console.error("Error:", error);
                 });
             });
