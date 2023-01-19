@@ -38,6 +38,10 @@ def home():
 def view_info():
     return render_template('view_info.html')
 
+@app.route('/mod_info')
+def mod_info():
+    return render_template('mod_info.html')
+
 #the following methods are for displaying information 
 
 
