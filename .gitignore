@@ -12,3 +12,4 @@ CricBase/prj/bin/python3
 *.11
 CricBase/prj/bin/python
 *.cfg
+CricBase/prj/bin/flask
