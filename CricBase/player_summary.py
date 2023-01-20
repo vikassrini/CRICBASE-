@@ -1,16 +1,20 @@
 import json
 
-from player import Player
-
-class PlayerSummary(Player):
-    def __init__(self, PlayerID, FName, LName, DOB, PrimarySkill, SecondarySkill, BowlingArm, BattingHand, TeamID, DebutID, Matches, Runs, Average, StrikeRate, Overs, Wickets, BowlingAverage, BowlingStrikeRate, Catches: int = 0 , RunOuts: int = 0, Stumpings: int = 0):
-        super().__init__(PlayerID, FName, LName, DOB, PrimarySkill, SecondarySkill, BowlingArm, BattingHand, TeamID, DebutID)
+class PlayerSummary():
+    def __init__(self, PlayerID, FName, LName, TeamID, Matches, Runs, Balls, Average, StrikeRate, Overs, RunsConceded, Wickets, Maidens, BowlingAverage, BowlingStrikeRate, Catches, RunOuts, Stumpings):
+        self.PlayerID = PlayerID
+        self.FName = FName
+        self.LName = LName
+        self.TeamID = TeamID
         self.Matches = Matches
         self.Runs = Runs
+        self.Balls = Balls
         self.Average = Average
         self.StrikeRate = StrikeRate
         self.Overs = Overs
+        self.RunsConceded = RunsConceded
         self.Wickets = Wickets
+        self.Maidens = Maidens
         self.BowlingAverage = BowlingAverage
         self.BowlingStrikeRate = BowlingStrikeRate
         self.Catches = Catches

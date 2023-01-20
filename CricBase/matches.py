@@ -2,13 +2,13 @@ import json
 import datetime
 
 class Match:
-    def __init__(self, MatchID, TournamentID, TeamID1, TeamID2, Venue, Date):
+    def __init__(self, MatchID, TournamentID, TeamID1, TeamID2, Venue, DatePlayed):
         self.MatchID = MatchID
         self.TournamentID = TournamentID
         self.TeamID1 = TeamID1
         self.TeamID2 = TeamID2
         self.Venue = Venue
-        self.Date = Date
+        self.DatePlayed = DatePlayed
 
     @staticmethod
     def from_database_row(row):
@@ -16,12 +16,15 @@ class Match:
 
     @staticmethod
     def to_database_row(match):
-        return (match.MatchID, match.TournamentID, match.TeamID1, match.TeamID2, match.Venue, match.Date)
+        return (match.MatchID, match.TournamentID, match.TeamID1, match.TeamID2, match.Venue, match.DatePlayed)
 
     @staticmethod
     def from_json(json_string):
-        data = json.loads(json_string)
-        return Match(**data)
+        date_string = json_string['DatePlayed']
+        date_format = '%Y-%m-%d'
+        date = datetime.datetime.strptime(date_string, date_format)
+        json_string['DatePlayed'] = date
+        return Match(**json_string)
 
     def json_default(self,value):
         if isinstance(value,datetime.date):
@@ -44,7 +47,7 @@ class Match:
     @staticmethod
     def write_to_database(conn, match):
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO MATCHES (MatchID, TournamentID, TeamID1, TeamID2, Venue, Date) VALUES (%s, %s, %s, %s, %s, %s)', Match.to_database_row(match))
+        cursor.execute('INSERT INTO MATCHES (MatchID, TournamentID, TeamID1, TeamID2, Venue, DatePlayed) VALUES (%s, %s, %s, %s, %s, %s)', Match.to_database_row(match))
         conn.commit()
 
     @staticmethod

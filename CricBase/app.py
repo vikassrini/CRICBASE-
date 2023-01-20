@@ -178,6 +178,19 @@ def disp_batting_analysis():
     return render_template('index.html', rows=rows , column =column)
     
 
+@app.route('/display_player_summary')
+def display_player_summary():
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+    rows = list()
+    column = ['PLayerID','FName','LName','TeamID','Matches','Runs','Balls','Average','StrikeRate','Overs','RunsConceded','Wickets','Maidens', 'BowlingAverage','BowlingStrikeRate','Catches','RunOuts','Stumpings']
+    cursor.execute("SELECT PlayerID from PLAYER WHERE PlayerID != 23")
+    player_ids = cursor.fetchall()
+    for i in player_ids:
+        cursor.callproc('get_player_summary',(i,))
+        rows.append(cursor.fetchone())
+    
+    return render_template('index.html', rows = rows, column = column)
 
 # player 
 @app.route('/player/<int:player_id>', methods=['GET'])
@@ -207,6 +220,8 @@ def delete_player(player_id):
 def get_team(team_id):
     conn = mysql.connect()
     team = Team.read_from_database(conn, team_id)
+    if team is None:
+        return "No entry found", 404
     return team.to_json(), 200
 
 @app.route('/team', methods=['POST'])
@@ -228,6 +243,8 @@ def delete_team(team_id):
 def get_tournament(tournament_id):
     conn = mysql.connect()
     tournament = Tournament.read_from_database(conn, tournament_id)
+    if tournament is None:
+        return "No entry found", 404
     return tournament.to_json(), 200
 
 @app.route('/tournament', methods=['POST'])
@@ -249,6 +266,8 @@ def delete_tournament(tournament_id):
 def get_match(match_id):
     conn = mysql.connect()
     match = Match.read_from_database(conn, match_id)
+    if match is None:
+        return "No entry found", 404
     return match.to_json(), 200
 
 @app.route('/matches', methods=['POST'])
@@ -274,8 +293,9 @@ def delete_match(match_id):
 @app.route('/batting_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['GET'])
 def get_batting_analysis(player_id, match_id, team_id):
     conn = mysql.connect()
-    cursor = conn.cursor()
     battingAnalysis = BattingAnalysis.read_from_database(conn, player_id, match_id, team_id)
+    if battingAnalysis is None:
+        return "No entry found", 404
     return battingAnalysis.to_json(), 200
 
 @app.route('/batting_analysis', methods=['POST'])
@@ -291,7 +311,7 @@ def create_batting_analysis():
 @app.route('/batting_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE'])
 def delete_batting_analysis(player_id, match_id, team_id):
     conn = mysql.connect()
-    BattingAnalysis.delete_from_database(player_id, match_id, team_id)
+    BattingAnalysis.delete_from_database(conn,player_id, match_id, team_id)
     resp = jsonify({'message': 'Batting analysis deleted successfully'})
     resp.status_code = 200
     return resp
@@ -301,6 +321,8 @@ def delete_batting_analysis(player_id, match_id, team_id):
 def get_bowling_analysis(player_id, match_id, team_id):
     conn = mysql.connect()
     bowlingAnalysis = BowlingAnalysis.read_from_database(conn, player_id, match_id, team_id)
+    if bowlingAnalysis is None:
+        return "No entry found", 404
     return bowlingAnalysis.to_json(), 200
 
 @app.route('/bowling_analysis', methods=['POST'])
@@ -326,6 +348,8 @@ def delete_bowling_analysis(player_id, match_id, team_id):
 def get_fielding_analysis(player_id, match_id, team_id):
     conn = mysql.connect()
     fielding = FieldingAnalysis.read_from_database(conn, player_id, match_id, team_id)
+    if fielding is None:
+        return "No entry found", 404
     return fielding.to_json(), 200
 
 @app.route('/fielding_analysis', methods=['POST'])
@@ -351,6 +375,8 @@ def delete_fielding_analysis(player_id, match_id, team_id):
 def get_dismissal(match_id, batter_id):
     conn = mysql.connect()
     dismissal = Dismissal.read_from_database(conn, match_id, batter_id)
+    if dismissal is None:
+        return "No entry found", 404
     return dismissal.to_json(), 200
 
 @app.route('/dismissals', methods=['POST'])

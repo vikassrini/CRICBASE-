@@ -15,13 +15,7 @@ player table
 }
 
 tournament table 
-{
-    "TournamentID": 2,
-    "TournamentName": "SECOND DIVISION",
-    "StartYear": 2022,
-    "Level": "CLUB",
-    "EndYear": 2022
-}
+{"TournamentID": 2,"TournamentName": "SECOND DIVISION","StartYear": 2022,"Grade": "CLUB","EndYear": 2022}
 
 team table
 {
@@ -48,7 +42,7 @@ matches table
 batting analysis table 
 {
     "PlayerID": 1,
-    "MatchID": 111,
+    "MatchID": 113,
     "TeamID": 11,
     "BallsFaced": 2,
     "RunsScored": 1,
@@ -60,7 +54,7 @@ batting analysis table
 bowling analysis table 
 {
     "PlayerID": 5,
-    "MatchID": 111,
+    "MatchID": 113,
     "TeamID": 11,
     "OversBowled": 4.0,
     "RunsConceded": 30,
@@ -81,7 +75,7 @@ fiedling analysis table
 
 dismissal table 
 {
-    "MatchID": 111,
+    "MatchID": 113,
     "BatterID": 2,
     "BowlerID": 18,
     "FielderID": 23,

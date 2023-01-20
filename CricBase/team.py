@@ -2,11 +2,11 @@ import json
 import pymysql
 
 class Team:
-    def __init__(self, TeamID, Name, Division, Level):
+    def __init__(self, TeamID, Name, Division, Grade):
         self.TeamID = TeamID
         self.Name = Name
         self.Division = Division
-        self.Level = Level
+        self.Grade = Grade
 
     @staticmethod
     def from_database_row(row):
@@ -14,12 +14,12 @@ class Team:
 
     @staticmethod
     def to_database_row(team):
-        return (team.TeamID, team.Name, team.Division, team.Level)
+        return (team.TeamID, team.Name, team.Division, team.Grade)
 
     @staticmethod
     def from_json(json_string):
-        data = json.loads(json_string)
-        return Team(**data)
+        #data = json.loads(json_string)
+        return Team(**json_string)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent=4)
@@ -36,7 +36,7 @@ class Team:
     @staticmethod
     def write_to_database(conn, team):
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO TEAM (TeamID, Name, Division, Level) VALUES (%s, %s, %s, %s)', Team.to_database_row(team))
+        cursor.execute('INSERT INTO TEAM (TeamID, Name, Division, Grade) VALUES (%s, %s, %s, %s)', Team.to_database_row(team))
         conn.commit()
 
     @staticmethod

@@ -2,13 +2,13 @@ import json
 import pymysql
 
 class BattingAnalysis:
-    def __init__(self, PlayerID, MatchID, TeamID, BallsFaced, RunsScored, isDismissed, Fours, Sixes):
+    def __init__(self, PlayerID, MatchID, TeamID, BallsFaced, RunsScored, DismissalStatus, Fours, Sixes):
         self.PlayerID = PlayerID
         self.MatchID = MatchID
         self.TeamID = TeamID
         self.BallsFaced = BallsFaced
         self.RunsScored = RunsScored
-        self.isDismissed = isDismissed
+        self.DismissalStatus = DismissalStatus
         self.Fours = Fours
         self.Sixes = Sixes
 
@@ -18,13 +18,13 @@ class BattingAnalysis:
 
     @staticmethod
     def to_database_row(analysis):
-        return (analysis.PlayerID, analysis.MatchID, analysis.TeamID, analysis.BallsFaced, analysis.RunsScored, analysis.isDismissed, analysis.Fours, analysis.Sixes)
+        return (analysis.PlayerID, analysis.MatchID, analysis.TeamID, analysis.BallsFaced, analysis.RunsScored, analysis.DismissalStatus, analysis.Fours, analysis.Sixes)
 
 
     @staticmethod
     def from_json(json_string):
-        data = json.loads(json_string)
-        return BattingAnalysis(**data)
+        #data = json.loads(json_string)
+        return BattingAnalysis(**json_string)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent=4)
@@ -41,7 +41,7 @@ class BattingAnalysis:
     @staticmethod
     def write_to_database(conn, analysis):
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO BATTING_ANALYSIS (PlayerID, MatchID, TeamID, BallsFaced, RunsScored, isDismissed, Fours, Sixes) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', 
+        cursor.execute('INSERT INTO BATTING_ANALYSIS (PlayerID, MatchID, TeamID, BallsFaced, RunsScored, DismissalStatus, Fours, Sixes) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', 
                        BattingAnalysis.to_database_row(analysis))
         conn.commit()
 

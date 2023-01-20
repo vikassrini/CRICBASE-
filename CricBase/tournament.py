@@ -2,11 +2,11 @@ import json
 import pymysql
 
 class Tournament:
-    def __init__(self, TournamentID, TournamentName, StartYear, Level, EndYear):
+    def __init__(self, TournamentID, TournamentName, StartYear, Grade, EndYear):
         self.TournamentID = TournamentID
         self.TournamentName = TournamentName
         self.StartYear = StartYear
-        self.Level = Level
+        self.Grade = Grade
         self.EndYear = EndYear
 
     @staticmethod
@@ -15,12 +15,12 @@ class Tournament:
 
     @staticmethod
     def to_database_row(tournament):
-        return (tournament.TournamentID, tournament.TournamentName, tournament.StartYear, tournament.Level, tournament.EndYear)
+        return (tournament.TournamentID, tournament.TournamentName, tournament.StartYear, tournament.Grade, tournament.EndYear)
 
     @staticmethod
     def from_json(json_string):
-        data = json.loads(json_string)
-        return Tournament(**data)
+        #data = json.loads(json_string)
+        return Tournament(**json_string)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent=4)
@@ -37,7 +37,7 @@ class Tournament:
     @staticmethod
     def write_to_database(conn, tournament):
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO TOURNAMENT (TournamentID, TournamentName, StartYear, Level, EndYear) VALUES (%s, %s, %s, %s, %s)', Tournament.to_database_row(tournament))
+        cursor.execute('INSERT INTO TOURNAMENT (TournamentID, TournamentName, StartYear, Grade, EndYear) VALUES (%s, %s, %s, %s, %s)', Tournament.to_database_row(tournament))
         conn.commit()
 
     @staticmethod
