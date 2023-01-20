@@ -24,8 +24,8 @@ mysql = MySQL()
 
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = "root"
-app.config['MYSQL_DATABASE_PASSWORD'] = "root123"
-app.config['MYSQL_DATABASE_DB'] = 'CRICO'
+app.config['MYSQL_DATABASE_PASSWORD'] = "varunproj123#"
+app.config['MYSQL_DATABASE_DB'] = 'CRIC2'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
@@ -187,7 +187,7 @@ def display_player_summary():
     cursor.execute("SELECT PlayerID from PLAYER WHERE PlayerID != 23")
     player_ids = cursor.fetchall()
     for i in player_ids:
-        cursor.callproc('get_player_summary',(i,))
+        cursor.callproc('getSummary',(i,))
         rows.append(cursor.fetchone())
     
     return render_template('index.html', rows = rows, column = column)
