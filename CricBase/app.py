@@ -46,6 +46,10 @@ def view_info():
 def mod_info():
     return render_template('mod_info.html')
 
+@app.route('/player_form', methods = ['GET'])
+def display_create_player_form():
+    return render_template('player-form.html')
+
 #the following methods are for displaying information 
 
 
@@ -191,6 +195,8 @@ def display_player_summary():
         rows.append(cursor.fetchone())
     
     return render_template('index.html', rows = rows, column = column)
+
+
 
 # player 
 @app.route('/player/<int:player_id>', methods=['GET'])
