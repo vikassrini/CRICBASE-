@@ -24,8 +24,8 @@ mysql = MySQL()
 
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = "root"
-app.config['MYSQL_DATABASE_PASSWORD'] = "varunproj123#"
-app.config['MYSQL_DATABASE_DB'] = 'CRIC2'
+app.config['MYSQL_DATABASE_PASSWORD'] = "root123"
+app.config['MYSQL_DATABASE_DB'] = 'CRICO'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
@@ -46,9 +46,6 @@ def view_info():
 def mod_info():
     return render_template('mod_info.html')
 
-@app.route('/player_form', methods = ['GET'])
-def display_create_player_form():
-    return render_template('player-form.html')
 
 #the following methods are for displaying information 
 
