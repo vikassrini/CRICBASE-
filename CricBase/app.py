@@ -184,7 +184,7 @@ def display_player_summary():
     cnx = mysql.connect()
     cursor = cnx.cursor()
     rows = list()
-    column = ['PLayerID','FName','LName','TeamID','Matches','Innings','Runs','Average','StrikeRate','Overs','RunsConceded','Wickets','BowlingAverage','BowlingStrikeRate','Catches','RunOuts','Stumpings']
+    column = ['PLayerID','FName','LName','TeamID','Matches','Innings','Runs','Average','StrikeRate','Overs','RunsConceded','Wickets','Maidens','BowlingAverage','BowlingStrikeRate','Catches','RunOuts','Stumpings']
     cursor.execute("SELECT PlayerID from PLAYER WHERE PlayerID != 23")
     player_ids = cursor.fetchall()
     for i in player_ids:
