@@ -1,3 +1,15 @@
 
 *.pyc
 *.pyc
+CricBase/prj/bin/activate
+CricBase/prj/bin/activate.csh
+*.fish
+*.ps1
+CricBase/prj/bin/pip
+CricBase/prj/bin/pip3
+CricBase/prj/bin/pip3.11
+CricBase/prj/bin/python3
+*.11
+CricBase/prj/bin/python
+*.cfg
+CricBase/prj/bin/flask
