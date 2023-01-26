@@ -155,7 +155,7 @@ def disp_bowling_analysis():
     cursor = cnx.cursor()
 
     query = "select * from bowling_analysis"
-    column = ['MatchID', 'BatterID', 'BowlerID', 'FielderID', 'NatureOfDismissal']
+    column = ['PlayerID', 'MatchID', 'TeamID', 'OversBowled', 'RunsConceded','Maidens','Wickets']
     cursor.execute(query)
 
     rows = cursor.fetchall()
@@ -187,7 +187,7 @@ def display_player_summary():
     cnx = mysql.connect()
     cursor = cnx.cursor()
     rows = list()
-    column = ['PLayerID','FName','LName','TeamID','Matches','Runs','Balls','Average','StrikeRate','Overs','RunsConceded','Wickets','Maidens', 'BowlingAverage','BowlingStrikeRate','Catches','RunOuts','Stumpings']
+    column = ['PLayerID','FName','LName','TeamID','Matches','Innings','Runs','Balls','Average','StrikeRate','Overs','RunsConceded','Wickets','Maidens', 'BowlingAverage','BowlingStrikeRate','Catches','RunOuts','Stumpings']
     cursor.execute("SELECT PlayerID from PLAYER WHERE PlayerID != 23")
     player_ids = cursor.fetchall()
     for i in player_ids:
