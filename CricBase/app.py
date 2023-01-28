@@ -27,7 +27,7 @@ mysql = MySQL()
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = "root"
 app.config['MYSQL_DATABASE_PASSWORD'] = "awbo22Oct!"
-app.config['MYSQL_DATABASE_DB'] = 'CRICBASE'
+app.config['MYSQL_DATABASE_DB'] = 'CRICO'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
@@ -397,22 +397,6 @@ def get_player_summary(player_id):
     playerSummary = PlayerSummary.read_from_database(conn=conn, player_id=player_id)
     return playerSummary.to_json(),200
 
-""" @app.route('/matchSummary/<int:match_id>')
-def get_Match_Summary(match_id):
-    conn = mysql.connect()
-    match = Matches.read_from_database(conn, match_id)
-    
-    battingSummaries = list()
-    battingSummaries.append(BattingSummary.create_batting_summary(conn, match_id, match.TeamID1))
-    battingSummaries.append(BattingSummary.create_batting_summary(conn, match_id, match.TeamID2))
-
-    bowlingSummaries = list()
-    bowlingSummaries.append(BowlingSummary.create_bowling_summary(conn, match_id, match.TeamID1))
-    bowlingSummaries.append(BowlingSummary.create_bowling_summary(conn, match_id, match.TeamID2))
-
-    match_summary = MatchSummary(battingSummaries, bowlingSummaries)
-    return match_summary.to_json(), 200
- """
 if __name__ == '__main__':
     app.run(debug=True)
 
