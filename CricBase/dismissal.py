@@ -19,8 +19,8 @@ class Dismissal:
 
     @staticmethod
     def from_json(json_string):
-        data = json.loads(json_string)
-        return Dismissal(**data)
+        #data = json.loads(json_string)
+        return Dismissal(**json_string)
 
     
     def to_json(self):
@@ -39,12 +39,12 @@ class Dismissal:
     def write_to_database(conn, dismissal):
         cursor = conn.cursor()
         cursor.execute('INSERT INTO DISMISSAL (MatchID, BatterID, BowlerID, FielderID, NatureOfDismissal) VALUES (%s, %s, %s, %s,%s)',
-                        Dismissal.to_database_row)
+                        Dismissal.to_database_row(dismissal=dismissal))
         conn.commit()
 
 
     @staticmethod
-    def delete_from_database(conn, match_id, player_id):
+    def delete_from_database(conn, match_id, batter_id):
         cursor = conn.cursor()
         cursor.execute('DELETE FROM DISMISSAL WHERE MatchID=%s AND BatterID=%s', (match_id, batter_id))
         conn.commit()

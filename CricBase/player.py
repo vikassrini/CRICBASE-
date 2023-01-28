@@ -23,8 +23,8 @@ class Player:
 
     @staticmethod
     def from_json(json_string):
-        data = json.loads(json_string)
-        return Player(**data)
+        #data = json.loads(json_string)
+        return Player(**json_string)
 
     
     def json_default(self,value):

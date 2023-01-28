@@ -1,7 +1,10 @@
+
+
+player table
 {
   "PlayerID" : 24,
-  "FName" : "Udupeshwari",
-  "LName" : "BondedLabourer",
+  "FName" : "Udupi",
+  "LName" : "Acharya",
   "DOB" : "2001-10-22",
   "PrimarySkill" : "Bowler",
   "SecondarySkill" : "BATSMAN",
@@ -9,5 +12,73 @@
   "BattingHand" : "R",
   "TeamID" : "11",
   "DebutID" : "111"
+}
+
+tournament table 
+{"TournamentID": 2,"TournamentName": "SECOND DIVISION","StartYear": 2022,"Grade": "CLUB","EndYear": 2022}
+
+team table
+{
+    "TeamID": 14,
+    "Name": "eagles CRICKET CLUB",
+    "Division": "2",
+    "Level": "SEMI PROFESSIONAL"
+}
+
+matches table 
+{
+    "MatchID": 113,
+    "TournamentID": 2,
+    "TeamID1": 14,
+    "TeamID2": 11,
+    "Venue": "RNSIT CRICKET GROUND",
+    "Date": {
+    "year": 2022,
+    "month": 1,
+    "day": 1
+    }
+}
+
+batting analysis table 
+{
+    "PlayerID": 1,
+    "MatchID": 113,
+    "TeamID": 11,
+    "BallsFaced": 2,
+    "RunsScored": 1,
+    "isDismissed": "OUT",
+    "Fours": 0,
+    "Sixes": 0
+}
+
+bowling analysis table 
+{
+    "PlayerID": 5,
+    "MatchID": 113,
+    "TeamID": 11,
+    "OversBowled": 4.0,
+    "RunsConceded": 30,
+    "Maidens": 0,
+    "Wickets": 2
+    }
+
+fiedling analysis table 
+{
+    "PlayerID": 1,
+    "MatchID": 111,
+    "TeamID": 11,
+    "Catches": 0,
+    "Stumpings": 0,
+    "RunOuts": 0
+    }
+
+
+dismissal table 
+{
+    "MatchID": 113,
+    "BatterID": 2,
+    "BowlerID": 18,
+    "FielderID": 23,
+    "NatureOfDismissal": "BOWLED"
 }
 

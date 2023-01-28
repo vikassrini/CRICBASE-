@@ -20,8 +20,8 @@ class FieldingAnalysis:
 
     @staticmethod
     def from_json(json_string):
-        data = json.loads(json_string)
-        return FieldingAnalysis(**data)
+        #data = json.loads(json_string)
+        return FieldingAnalysis(**json_string)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent=4)
@@ -39,8 +39,8 @@ class FieldingAnalysis:
     def write_to_database(conn, analysis):
         cursor = conn.cursor()
         cursor.execute('INSERT INTO FIELDING_ANALYSIS (PlayerID, MatchID, TeamID, Catches, Stumpings, RunOuts) VALUES (%s, %s, %s, %s, %s, %s)',
-                        FieldingAnalysis.to_database_row)
-        cursor.commit()
+                        FieldingAnalysis.to_database_row(analysis))
+        conn.commit()
 
     @staticmethod
     def delete_from_database(conn, player_id, match_id, team_id):
