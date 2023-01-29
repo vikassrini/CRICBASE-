@@ -1,0 +1,153 @@
+<html>
+  <head>
+    <style>
+          .form-container {
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        width: 500px;
+      }
+      
+  .form-group {
+    margin-bottom: 20px;
+  }
+    label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+      }  
+      input[type="text"], input[type="number"], select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+      
+  button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #29839e;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+</style>
+
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+    <form action="" method="post">
+        <div class="form-group">
+          <label for="PlayerID">Player ID:</label>
+          <input type="number" class="form-control" id="PlayerID" name="PlayerID" required>
+        </div>
+        <div class="form-group">
+          <label for="MatchID">Match ID:</label>
+          <input type="number" class="form-control" id="MatchID" name="MatchID" required>
+        </div>
+        <div class="form-group">
+          <label for="TeamID">Team ID:</label>
+          <input type="number" class="form-control" id="TeamID" name="TeamID" required>
+        </div>
+        <div class="form-group">
+          <label for="OversBowled">Overs Bowled:</label>
+          <input type="number" class="form-control" id="OversBowled" name="OversBowled" required>
+        </div>
+        <div class="form-group">
+          <label for="RunsConceded">Runs Conceded:</label>
+          <input type="number" class="form-control" id="RunsConceded" name="RunsConceded" required>
+        </div>
+        <div class="form-group">
+          <label for="Maidens">Maidens:</label>
+          <input type="number" class="form-control" id="Maidens" name="Maidens" required>
+        </div>
+        <div class="form-group">
+          <label for="Wickets">Wickets:</label>
+          <input type="number" class="form-control" id="Wickets" name="Wickets" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      </div>
+      <script>
+    
+function validateForm() {
+  var playerID = document.forms["bowlingForm"]["PlayerID"].value;
+  var matchID = document.forms["bowlingForm"]["MatchID"].value;
+  var teamID = document.forms["bowlingForm"]["TeamID"].value;
+  var oversBowled = document.forms["bowlingForm"]["OversBowled"].value;
+  var runsConceded = document.forms["bowlingForm"]["RunsConceded"].value;
+  var maidens = document.forms["bowlingForm"]["Maidens"].value;
+  var wickets = document.forms["bowlingForm"]["Wickets"].value;
+
+  if (playerID == "") {
+    alert("PlayerID must be filled out");
+    return false;
+  } else if (isNaN(playerID)) {
+    alert("PlayerID must be a number");
+    return false;
+  }
+
+  if (matchID == "") {
+    alert("MatchID must be filled out");
+    return false;
+  } else if (isNaN(matchID)) {
+    alert("MatchID must be a number");
+    return false;
+  }
+
+  if (teamID == "") {
+    alert("TeamID must be filled out");
+    return false;
+  } else if (isNaN(teamID)) {
+    alert("TeamID must be a number");
+    return false;
+  }
+
+  if (oversBowled == "") {
+    alert("OversBowled must be filled out");
+    return false;
+  } else if (isNaN(oversBowled)) {
+    alert("OversBowled must be a number");
+    return false;
+  }
+
+  if (runsConceded == "") {
+    alert("RunsConceded must be filled out");
+    return false;
+  } else if (isNaN(runsConceded)) {
+    alert("RunsConceded must be a number");
+    return false;
+  }
+
+  if (maidens == "") {
+    alert("Maidens must be filled out");
+    return false;
+  } else if (isNaN(maidens)) {
+    alert("Maidens must be a number");
+    return false;
+  }
+
+  if (wickets == "") {
+    alert("Wickets must be filled out");
+    return false;
+  } else if (isNaN(wickets)) {
+    alert("Wickets must be a number");
+    return false;
+  }
+
+  return true;
+}
+</script>
+  </body>
+</html>      

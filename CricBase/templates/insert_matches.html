@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title>Add Match</title>
+        <style>
+            /* CSS for form styling goes here */
+            
+            body{
+                background-color: rgb(255, 255, 255);
+                color: rgb(0, 0, 0);
+                font-family: Arial, sans-serif;
+            }
+            form{
+                padding: 20px;
+                margin: 0 auto;
+                width: 60%;
+                background-color: rgb(241, 241, 241);
+                border-radius: 10px;
+            }
+            label{
+                font-weight: bold;
+                margin-right: 10px;
+            }
+            input[type="text"], input[type="number"], input[type="date"]{
+                padding: 12px 20px;
+                margin: 8px 0;
+                box-sizing: border-box;
+                border: none;
+                border-bottom: 2px solid rgb(0, 0, 0);
+                border-top: 2px solid rgb(0,0,0);
+                border-right: 2px solid rgb(0,0,0);
+                border-left: 2px solid rgb(0,0,0);
+                width: 100%;
+            }
+            input[type="submit"]{
+                background-color: rgb(254, 254, 254);
+                color: rgb(0, 0, 0);
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+                border-bottom: 2px solid rgb(0, 0, 0);
+                border-top: 2px solid rgb(0,0,0);
+                border-right: 2px solid rgb(0,0,0);
+                border-left: 2px solid rgb(0,0,0);
+            }
+            input[type="submit"]:hover {
+                background-color: rgb(53, 126, 221);
+                
+            }
+        </style>
+    </head>
+    <body>
+        <form action = '/add_match' method = 'post'>
+            <label for = 'match_id'>Match ID:</label>
+            <input type = 'number' id = 'match_id' name = 'match_id' required>
+            <br>
+            <label for = 'tournament_id'>Tournament ID:</label>
+            <input type = 'number' id = 'tournament_id' name = 'tournament_id' required>
+            <br>
+            <label for = 'team1_id'>Team 1 ID:</label>
+            <input type = 'number' id = 'team1_id' name = 'team1_id' required>
+            <br>
+            <label for = 'team2_id'>Team 2 ID:</label>
+            <input type = 'number' id = 'team2_id' name = 'team2_id' required>
+            <br>
+            <label for = 'venue'>Venue:</label>
+            <input type = 'text' id = 'venue' name = 'venue' required>
+            <br>
+            <label for = 'date_played'>Date Played:</label>
+            <input type = 'date' id = 'date_played' name = 'date_played' required>
+            <br>
+            <input type = 'submit' value = 'Add Match'>
+        </form>
+    </body>
+</html>
