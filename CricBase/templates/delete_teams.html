@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <style>
+      form {
+        width: 30%;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+      }
+      input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+
+  input[type="submit"] {
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+    background-color: darkgreen;
+  }
+</style>
+</head>
+<body>
+  <form action="/team/<int:team_id>" method="post">
+    <h2>Delete Team</h2>
+    <input type="number" name="team_id" placeholder="Enter Team ID" required>
+    <input type="submit" value="Delete Team">
+  </form>
+</body>
+</html>

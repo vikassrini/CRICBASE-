@@ -33,6 +33,7 @@ mysql.init_app(app)
 
 #front end
 #basic pages
+#####################################################################################################
 @app.route('/')
 def index():
     return render_template('login.html')
@@ -48,10 +49,13 @@ def view_info():
 def mod_info():
     return render_template('mod_info.html')
 
+@app.route('/delete_info')
+def delete_info():
+    return render_template('delete_info.html')
+
 
 #the following methods are for displaying information 
-
-
+########################################################################################################
 @app.route('/display_tournament')
 def disp_tourn():
     cnx = mysql.connect()
@@ -196,6 +200,8 @@ def display_player_summary():
     return render_template('index.html', rows = rows, column = column)
 
 # insert info end points start from here
+# this section is more of a testing point for the frontend
+########################################################################################################################################################################################################################
 @app.route('/render_insert_player_info')    #link here to html insert nav bar
 def player_form():
     return render_template('insert_player.html')
@@ -450,6 +456,8 @@ def submit_bowling_analysis():
             mysql.connect().commit()
             cursor.close()
             return'Data inserted successfully'
+#######################################################################################################################################################################
+# more efficiently written code starts from here 
 
 # player 
 @app.route('/player/<int:player_id>', methods=['GET'])
@@ -468,7 +476,11 @@ def create_player():
     Player.write_to_database(conn, player)
     return jsonify({'message': 'Player created successfully'}), 201
 
-@app.route('/player/<int:player_id>', methods=['DELETE'])
+@app.route('/delete_player_render')
+def render_player():
+    return render_template('delete_player.html')
+
+@app.route('/player/<int:player_id>', methods=['DELETE'])   #done
 def delete_player(player_id):
     conn = mysql.connect()
     Player.delete_from_database(conn, player_id)
@@ -491,7 +503,11 @@ def create_team():
     Team.write_to_database(conn, team)
     return jsonify({'message': 'Team created successfully'}), 201
 
-@app.route('/team/<int:team_id>', methods=['DELETE'])
+@app.route('/delete_team_render')
+def render_team():
+    return render_template('delete_teams.html')
+
+@app.route('/team/<int:team_id>', methods=['DELETE'])   #done
 def delete_team(team_id):
     conn = mysql.connect()
     Team.delete_from_database(conn, team_id)
@@ -514,7 +530,11 @@ def create_tournament():
     Tournament.write_to_database(conn, tournament)
     return jsonify({'message': 'Tournament created successfully'}), 201
 
-@app.route('/tournament/<int:tournament_id>', methods=['DELETE'])
+@app.route('/delete_tournament_render')
+def render_delete_tournament():
+    return render_template('delete_tournament.html')
+
+@app.route('/tournament/<int:tournament_id>', methods=['DELETE']) #done
 def delete_tournament(tournament_id):
     conn = mysql.connect()
     Tournament.delete_from_database(conn, tournament_id)
@@ -539,7 +559,13 @@ def create_match():
     resp.status_code = 201
     return resp
 
-@app.route('/matches/<int:match_id>', methods=['DELETE'])
+@app.route('/delete_matches_render')
+def render_delete_matches():
+    return render_template('delete_matches.html')
+
+
+
+@app.route('/matches/<int:match_id>', methods=['DELETE']) #done
 def delete_match(match_id):
     conn = mysql.connect()
     Match.delete_from_database(conn, match_id)
@@ -567,7 +593,11 @@ def create_batting_analysis():
     resp.status_code = 200
     return resp
 
-@app.route('/batting_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE'])
+@app.route('/delete_batting_analysis_render')
+def render_delete_battinng_analysis():
+    return render_template('delete_batting_analysis.html')
+
+@app.route('/batting_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE']) #done
 def delete_batting_analysis(player_id, match_id, team_id):
     conn = mysql.connect()
     BattingAnalysis.delete_from_database(conn,player_id, match_id, team_id)
@@ -594,7 +624,11 @@ def create_bowling_analysis():
     resp.status_code = 201
     return resp
 
-@app.route('/bowling_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE'])
+@app.route('/delete_bowling_analysis_render')
+def render_delete_bowling_analysis():
+    return render_template('delete_bowling_analysis.html')
+
+@app.route('/bowling_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE']) #done
 def delete_bowling_analysis(player_id, match_id, team_id):
     conn = mysql.connect()
     BowlingAnalysis.delete_from_database(conn, player_id, match_id, team_id)
@@ -621,7 +655,11 @@ def create_fielding_analysis():
     resp.status_code = 201
     return resp
 
-@app.route('/fielding_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE'])
+@app.route('/delete_fielding_analysis_render')
+def render_delete_fielding_analysis():
+    return render_template('delete_fielding_analysis.html')
+
+@app.route('/fielding_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE']) #done
 def delete_fielding_analysis(player_id, match_id, team_id):
     conn = mysql.connect()
     FieldingAnalysis.delete_from_database(conn, player_id, match_id, team_id)
@@ -648,14 +686,19 @@ def create_dismissal():
     resp.status_code = 201
     return resp
 
-@app.route('/dismissals/<int:match_id>/<int:batter_id>', methods=['DELETE'])
+@app.route('/delete_dismissals_render')
+def render_delete_dismissal():
+    return render_template('delete_dismissals.html')
+
+@app.route('/dismissals/<int:match_id>/<int:batter_id>', methods=['DELETE'])#done
 def delete_dismissal(match_id, batter_id):
     conn = mysql.connect()
     Dismissal.delete_from_database(conn, match_id, batter_id)
     resp = jsonify({'message': 'Dismissal deleted successfully'})
     resp.status_code = 200
     return resp
-
+###################################################################################################
+#generates summaries 
 @app.route('/player_fielding_summary/<int:player_id>', methods=['GET'])
 def get_player_fielding_summary(player_id):
     conn = mysql.connect()

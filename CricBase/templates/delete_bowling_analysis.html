@@ -1,0 +1,34 @@
+<html>
+<head>
+  <style>
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 10px;
+      margin: 10px 0;
+      width: 200px;
+    }
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <form action="/bowling_analysis/<int:player_id>/<int:match_id>/<int:team_id>" method="post">
+    <h2>Delete Bowling Analysis</h2>
+    <input type="number" name="player_id" placeholder="Player ID" required>
+    <input type="number" name="match_id" placeholder="Match ID" required>
+    <input type="number" name="team_id" placeholder="Team ID" required>
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>
