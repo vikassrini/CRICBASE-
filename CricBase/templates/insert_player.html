@@ -41,7 +41,7 @@
     </style>
   </head>
   <body>
-     id="playerForm">
+     <form id="playerForm" class="form" action="{{url_for('submit_player')}}"  method="post">
       <label for="playerID">Player ID</label>
       <input type="text" id="playerID" name="playerID" onblur="validatePlayerID()">
       <div id="playerIDError" class="error"></div>
