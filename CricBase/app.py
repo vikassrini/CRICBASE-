@@ -208,16 +208,16 @@ def player_form():
 
 @app.route('/submit_player_info', methods=['POST'])
 def submit_player():
-    playerID = request.form['PlayerID']
-    fname = request.form['FName']
-    lname = request.form['LName']
-    dob = request.form['DOB']
-    primarySkill = request.form['PrimarySkill']
-    secondarySkill = request.form['SecondarySkill']
-    bowlingArm = request.form['BowlingArm']
-    battingHand = request.form['BattingHand']
-    teamID = request.form['TeamID']
-    debutID = request.form['DebutID']
+    playerID = request.form['playerID']
+    fname = request.form['fname']
+    lname = request.form['lname']
+    dob = request.form['dob']
+    primarySkill = request.form['primarySkill']
+    secondarySkill = request.form['secondarySkill']
+    bowlingArm = request.form['bowlingArm']
+    battingHand = request.form['battingHand']
+    teamID = request.form['teamID']
+    debutID = request.form['debutID']
     
     # Validate input data
     if not playerID.isdigit() or int(playerID) < 1:
@@ -291,17 +291,22 @@ def submit_tournament():
         # Validate form data
         if tournament_id and tournament_name and start_year and grade and end_year:
             # Create cursor
-            cur = mysql.connection.cursor()
+            conn = mysql.connect()
+            cur = conn.cursor()
 
             # Execute query
             cur.execute("INSERT INTO tournament(TournamentID, TournamentName, StartYear, Grade, EndYear) VALUES(%s, %s, %s, %s, %s)", (tournament_id, tournament_name, start_year, grade, end_year))
 
             # Commit to DB
-            mysql.connection.commit()
+            conn.commit()
 
             # Close connection
             cur.close()
-        return "Data inserted successfully"
+            conn.close()
+            return "Data inserted successfully"
+        return "ERROR"
+
+
 
 @app.route('/render_matches_insert_info')    #link here to html insert nav bar
 def matches_form():
@@ -309,19 +314,19 @@ def matches_form():
 
 @app.route('/submit_matches_info',methods=['POST'])
 def submit_matches():
-    match_id = request.form['MatchID']
-    tournament_id = request.form['TournamentID']
-    team_id1 = request.form['TeamID1']
-    team_id2 = request.form['TeamID2']
-    venue = request.form['Venue']
-    date_played = request.form['DatePlayed']
+    match_id = request.form['match_id']
+    tournament_id = request.form['tournament_id']
+    team_id1 = request.form['team1_id']
+    team_id2 = request.form['team2_id']
+    venue = request.form['venue']
+    date_played = request.form['date_played']
 
     # Validate the form data 
     if not match_id or not tournament_id or not team_id1 or not team_id2 or not venue or not date_played:
         return "Please fill in all the fields"
 
     # Connect to the MySQL database
-    cnx = mysql.connector.connect(user='your_username', password='your_password', host='your_host', database='your_dbname')
+    cnx = mysql.connect()
     cursor = cnx.cursor()
 
     # Insert the data into the matches table
@@ -339,23 +344,26 @@ def fielding_analysis_form():
 
 @app.route('/submit_fielding_analysis_info',methods=['POST'])
 def submit_fielding_analysis():
-        player_id = request.form.get('PlayerID')
-        match_id = request.form.get('MatchID')
-        team_id = request.form.get('TeamID')
-        catches = request.form.get('Catches')
-        stumpings = request.form.get('Stumpings')
-        run_outs = request.form.get('RunOuts')
+        player_id = request.form['player_id']
+        match_id = request.form['match_id']
+        team_id = request.form['team_id']
+        catches = request.form['catches']
+        stumpings = request.form['stumpings']
+        run_outs = request.form['run_outs']
         
         # Validate form data
         if not player_id or not match_id or not team_id or not catches or not stumpings or not run_outs:
             return "Please fill out all fields."
         
         # Insert data into MySQL database
-        cursor = mysql.connect().cursor()
+        cur = mysql.connect()
+        conn = cur.cursor()
         sql = "INSERT INTO fielding_analysis (PlayerID, MatchID, TeamID, Catches, Stumpings, RunOuts) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (player_id, match_id, team_id, catches, stumpings, run_outs))
-        mysql.connect().commit()
-        cursor.close()
+        conn.execute(sql, (player_id, match_id, team_id, catches, stumpings, run_outs))
+        cur.commit()
+        conn.close()
+        cur.close()
+
         
         return "Data successfully inserted into database."
 
@@ -379,11 +387,13 @@ def submit_dismissals():
         if not str(MatchID).isdigit() or not str(BatterID).isdigit() or not str(BowlerID).isdigit() or not str(FielderID).isdigit():
             return "MatchID, BatterID, BowlerID, FielderID should be integer"
         # Insert data into MySQL database
-        cursor = mysql.connect().cursor()
-        sql = "INSERT INTO fielding_analysis (MatchID, BatterID, BowlerID, FielderID,NatureOfDismissal) VALUES (%s, %s, %s, %s, %s)"
-        cursor.execute(sql, (MatchID, BatterID, BowlerID, FielderID,NatureOfDismissal))
+        cur = mysql.connect()
+        conn = cur.cursor()
+        sql = "INSERT INTO dismissal (MatchID, BatterID, BowlerID, FielderID,NatureOfDismissal) VALUES (%s, %s, %s, %s, %s)"
+        conn.execute(sql, (MatchID, BatterID, BowlerID, FielderID,NatureOfDismissal))
         mysql.connect().commit()
-        cursor.close()
+        conn.close()
+        cur.close()
         
         return "Data successfully inserted into database."
 
@@ -405,12 +415,14 @@ def submit_batting_analysis():
         
         # Validate form data
         if player_id and match_id and team_id and balls_faced and runs_scored and dismissal_status and fours and sixes:
-            cursor = mysql.connect.cursor()
+            cur = mysql.connect()
+            conn = cur.cursor()
             query = "INSERT INTO batting_analysis (PlayerID, MatchID, TeamID, BallsFaced, RunsScored, DismissalStatus, Fours, Sixes) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
             values = (player_id, match_id, team_id, balls_faced, runs_scored, dismissal_status, fours, sixes)
-            cursor.execute(query, values)
-            mysql.connect().commit()
-            cursor.close()
+            conn.execute(query, values)
+            cur.commit()
+            conn.close()
+            cur.close()
             return 'Data inserted successfully'
         else:
            return 'Please fill in all the fields'
@@ -448,13 +460,15 @@ def submit_bowling_analysis():
             error = 'Wickets is required'
         if error is None:
     
-            cursor = mysql.connect.cursor()
+            cur = mysql.connect()
+            conn = cur.cursor()
             # Insert the data into the database
             query = "INSERT INTO bowling_analysis (PlayerID, MatchID, TeamID, OversBowled, RunsConceded, Maidens, Wickets) VALUES (%s, %s, %s, %s, %s, %s, %s)"
             values = (player_id, match_id, team_id, overs_bowled, runs_conceded, maidens, wickets)
-            cursor.execute(query, values)
-            mysql.connect().commit()
-            cursor.close()
+            conn.execute(query, values)
+            cur.commit()
+            conn.close()
+            cur.close()
             return'Data inserted successfully'
 #######################################################################################################################################################################
 # more efficiently written code starts from here 
@@ -480,8 +494,9 @@ def create_player():
 def render_player():
     return render_template('delete_player.html')
 
-@app.route('/player/<int:player_id>', methods=['DELETE'])   #done
-def delete_player(player_id):
+@app.route('/delete_player', methods=['POST'])   #done
+def delete_player():
+    player_id = request.form['player_id']
     conn = mysql.connect()
     Player.delete_from_database(conn, player_id)
     return jsonify({'message': 'Player deleted successfully'}), 200
@@ -507,8 +522,9 @@ def create_team():
 def render_team():
     return render_template('delete_teams.html')
 
-@app.route('/team/<int:team_id>', methods=['DELETE'])   #done
-def delete_team(team_id):
+@app.route('/delete_team', methods=['POST'])   #done
+def delete_team():
+    team_id = request.form['team_id']
     conn = mysql.connect()
     Team.delete_from_database(conn, team_id)
     return jsonify({'message': 'Team deleted successfully'}), 200
@@ -534,8 +550,9 @@ def create_tournament():
 def render_delete_tournament():
     return render_template('delete_tournament.html')
 
-@app.route('/tournament/<int:tournament_id>', methods=['DELETE']) #done
-def delete_tournament(tournament_id):
+@app.route('/delete_tournament', methods=['POST']) #done
+def delete_tournament():
+    tournament_id = request.form['tournament_id']
     conn = mysql.connect()
     Tournament.delete_from_database(conn, tournament_id)
     return jsonify({'message': 'Tournament deleted successfully'}), 200
@@ -565,8 +582,9 @@ def render_delete_matches():
 
 
 
-@app.route('/matches/<int:match_id>', methods=['DELETE']) #done
-def delete_match(match_id):
+@app.route('/delete_matches', methods=['POST']) #done
+def delete_match():
+    match_id = request.form['match_id']
     conn = mysql.connect()
     Match.delete_from_database(conn, match_id)
     resp = jsonify({'message': 'Match deleted successfully'})
@@ -597,8 +615,11 @@ def create_batting_analysis():
 def render_delete_battinng_analysis():
     return render_template('delete_batting_analysis.html')
 
-@app.route('/batting_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE']) #done
-def delete_batting_analysis(player_id, match_id, team_id):
+@app.route('/delete_batting_analysis', methods=['POST']) #done
+def delete_batting_analysis():
+    player_id = request.form['player_id']
+    match_id =  request.form['match_id']
+    team_id = request.form['team_id']
     conn = mysql.connect()
     BattingAnalysis.delete_from_database(conn,player_id, match_id, team_id)
     resp = jsonify({'message': 'Batting analysis deleted successfully'})
@@ -628,8 +649,11 @@ def create_bowling_analysis():
 def render_delete_bowling_analysis():
     return render_template('delete_bowling_analysis.html')
 
-@app.route('/bowling_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE']) #done
-def delete_bowling_analysis(player_id, match_id, team_id):
+@app.route('/delete_bowling_analysis', methods=['POST']) #done
+def delete_bowling_analysis():
+    player_id = request.form['player_id']
+    match_id= request.form['match_id']
+    team_id=request.form['team_id']
     conn = mysql.connect()
     BowlingAnalysis.delete_from_database(conn, player_id, match_id, team_id)
     resp = jsonify({'message': 'Bowling analysis deleted successfully'})
@@ -659,8 +683,11 @@ def create_fielding_analysis():
 def render_delete_fielding_analysis():
     return render_template('delete_fielding_analysis.html')
 
-@app.route('/fielding_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE']) #done
-def delete_fielding_analysis(player_id, match_id, team_id):
+@app.route('/delete_fielding_analysis', methods=['POST']) #done
+def delete_fielding_analysis():
+    player_id = request.form['player_id']
+    match_id = request.form['match_id']
+    team_id = request.form['team_id']
     conn = mysql.connect()
     FieldingAnalysis.delete_from_database(conn, player_id, match_id, team_id)
     resp = jsonify({'message': 'Fielding analysis deleted successfully'})
@@ -690,8 +717,10 @@ def create_dismissal():
 def render_delete_dismissal():
     return render_template('delete_dismissals.html')
 
-@app.route('/dismissals/<int:match_id>/<int:batter_id>', methods=['DELETE'])#done
-def delete_dismissal(match_id, batter_id):
+@app.route('/delete_dismissals', methods=['POST'])#done
+def delete_dismissal():
+    match_id = request.form['match_id']
+    batter_id = request.form['batter_id']
     conn = mysql.connect()
     Dismissal.delete_from_database(conn, match_id, batter_id)
     resp = jsonify({'message': 'Dismissal deleted successfully'})

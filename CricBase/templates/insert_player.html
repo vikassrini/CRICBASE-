@@ -41,17 +41,17 @@
     </style>
   </head>
   <body>
-     <form id="playerForm" class="form" action="{{url_for('submit_player')}}"  method="post">
+     <form id="playerForm" class="form" action="{{url_for('submit_player')}}"  method="post" enctype="multipart/form-data">
       <label for="playerID">Player ID</label>
       <input type="text" id="playerID" name="playerID" onblur="validatePlayerID()">
       <div id="playerIDError" class="error"></div>
       
-      <label for="fName">First Name</label>
-      <input type="text" id="fName" name="fName" onblur="validateFName()">
+      <label for="fname">First Name</label>
+      <input type="text" id="fName" name="fname" onblur="validateFName()">
       <div id="fNameError" class="error"></div>
 
-      <label for="lName">Last Name</label>
-      <input type="text" id="lName" name="lName" onblur="validateLName()">
+      <label for="lname">Last Name</label>
+      <input type="text" id="lName" name="lname" onblur="validateLName()">
       <div id="lNameError" class="error"></div>
       
       <label for="dob">Date of Birth</label>
