@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dismissal Form</title>
+    <style>
+        /* Add CSS for form beautification here */
+        /* Example: */
+        /* Black and white theme */
+        body {
+          background-color: #fff;
+          color: #000;
+        }
+        /* Center form on page */
+        form {
+          width: 50%;
+          margin: 0 auto;
+          padding: 2em;
+          border: 1px solid #ccc;
+        }
+        /* Style form inputs */
+        input, select {
+          padding: 0.5em;
+          margin: 0.5em 0;
+          width: 100%;
+          border: 1px solid #ccc;
+          box-sizing: border-box;
+        }
+        /* Style submit button */
+        input[type="submit"] {
+          background-color: #000;
+          color: #fff;
+          border: none;
+          padding: 0.7em 1em;
+          cursor: pointer;
+        }
+        /* Style error messages */
+        .error {
+          color: red;
+          font-weight: bold;
+        }
+      </style>
+</head>
+  <body>
+    <div class="form-container">
+      <form id="dismissal-form" action="/submit_dismissals_info" method="post">
+        <label for="MatchID">Match ID:</label>
+        <input type="number" id="MatchID" name="MatchID" required>
+        <br>
+        <label for="BatterID">Batter ID:</label>
+        <input type="number" id="BatterID" name="BatterID" required>
+        <br>
+        <label for="BowlerID">Bowler ID:</label>
+        <input type="number" id="BowlerID" name="BowlerID" required>
+        <br>
+        <label for="FielderID">Fielder ID:</label>
+        <input type="number" id="FielderID" name="FielderID" required>
+        <br>
+        <label for="NatureOfDismissal">Nature of Dismissal:</label>
+        <input type="text" id="NatureOfDismissal" name="NatureOfDismissal" required>
+        <br>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+
+  </body>
+</html>

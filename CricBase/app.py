@@ -1,5 +1,7 @@
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template,request, url_for, flash, redirect
+from werkzeug.exceptions import abort
+
 from flaskext.mysql import MySQL
 from player import Player
 from batting_analysis import BattingAnalysis
@@ -24,13 +26,14 @@ mysql = MySQL()
 
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = "root"
-app.config['MYSQL_DATABASE_PASSWORD'] = "root123"
+app.config['MYSQL_DATABASE_PASSWORD'] = "awbo22Oct!"
 app.config['MYSQL_DATABASE_DB'] = 'CRICO'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
 #front end
 #basic pages
+#####################################################################################################
 @app.route('/')
 def index():
     return render_template('login.html')
@@ -46,10 +49,13 @@ def view_info():
 def mod_info():
     return render_template('mod_info.html')
 
+@app.route('/delete_info')
+def delete_info():
+    return render_template('delete_info.html')
+
 
 #the following methods are for displaying information 
-
-
+########################################################################################################
 @app.route('/display_tournament')
 def disp_tourn():
     cnx = mysql.connect()
@@ -193,7 +199,279 @@ def display_player_summary():
     
     return render_template('index.html', rows = rows, column = column)
 
+# insert info end points start from here
+# this section is more of a testing point for the frontend
+########################################################################################################################################################################################################################
+@app.route('/render_insert_player_info')    #link here to html insert nav bar
+def player_form():
+    return render_template('insert_player.html')
 
+@app.route('/submit_player_info', methods=['POST'])
+def submit_player():
+    playerID = request.form['playerID']
+    fname = request.form['fname']
+    lname = request.form['lname']
+    dob = request.form['dob']
+    primarySkill = request.form['primarySkill']
+    secondarySkill = request.form['secondarySkill']
+    bowlingArm = request.form['bowlingArm']
+    battingHand = request.form['battingHand']
+    teamID = request.form['teamID']
+    debutID = request.form['debutID']
+    
+    # Validate input data
+    if not playerID.isdigit() or int(playerID) < 1:
+        return "Invalid PlayerID. Please enter a valid number"
+    if not fname or not lname:
+        return "Please enter a first and last name"
+    if not dob:
+        return "Please enter a valid date of birth"
+    if not primarySkill:
+        return "Please enter a primary skill"
+    if not secondarySkill:
+        return "Please enter a secondary skill"
+    if not bowlingArm:
+        return "Please enter a bowling arm"
+    if not battingHand:
+        return "Please enter a batting hand"
+    if not teamID.isdigit() or int(teamID) < 1:
+        return "Invalid TeamID. Please enter a valid number"
+    if not debutID.isdigit() or int(debutID) < 1:
+        return "Invalid DebutID. Please enter a valid number"
+    
+    # Connect to MySQL
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    # Prepare and execute SQL query
+    sql = "INSERT INTO player(PlayerID, FName, LName, DOB, PrimarySkill, SecondarySkill, BowlingArm, BattingHand, TeamID, DebutID) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    data = (playerID, fname, lname, dob, primarySkill, secondarySkill, bowlingArm, battingHand, teamID, debutID)
+    cursor.execute(sql, data)
+    conn.commit()
+
+    # Close cursor and connection
+    cursor.close()
+    conn.close()
+
+    return "Data inserted successfully"
+
+@app.route('/render_team_insert_info')    #link here to html insert nav bar
+def team_form():
+    return render_template('insert_team.html')
+
+@app.route('/submit_team_info', methods=['POST'])
+def submit_team():
+    team_id = request.form.get('TeamID')
+    name = request.form.get('Name')
+    division = request.form.get('Division')
+    grade = request.form.get('Grade')
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO team (TeamID, Name, Division, Grade) VALUES (%s, %s, %s, %s)", (team_id, name, division, grade))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return "Data inserted successfully"
+
+@app.route('/render_tournament_insert_info')    #link here to html insert nav bar
+def tournament_form():
+    return render_template('insert_tournament.html')
+
+@app.route('/submit_tournament_info',methods=['POST'])
+def submit_tournament():
+   # Fetch form data
+        tournament_id = request.form['TournamentID']
+        tournament_name = request.form['TournamentName']
+        start_year = request.form['StartYear']
+        grade = request.form['Grade']
+        end_year = request.form['EndYear']
+        
+        # Validate form data
+        if tournament_id and tournament_name and start_year and grade and end_year:
+            # Create cursor
+            conn = mysql.connect()
+            cur = conn.cursor()
+
+            # Execute query
+            cur.execute("INSERT INTO tournament(TournamentID, TournamentName, StartYear, Grade, EndYear) VALUES(%s, %s, %s, %s, %s)", (tournament_id, tournament_name, start_year, grade, end_year))
+
+            # Commit to DB
+            conn.commit()
+
+            # Close connection
+            cur.close()
+            conn.close()
+            return "Data inserted successfully"
+        return "ERROR"
+
+
+
+@app.route('/render_matches_insert_info')    #link here to html insert nav bar
+def matches_form():
+    return render_template('insert_matches.html')
+
+@app.route('/submit_matches_info',methods=['POST'])
+def submit_matches():
+    match_id = request.form['match_id']
+    tournament_id = request.form['tournament_id']
+    team_id1 = request.form['team1_id']
+    team_id2 = request.form['team2_id']
+    venue = request.form['venue']
+    date_played = request.form['date_played']
+
+    # Validate the form data 
+    if not match_id or not tournament_id or not team_id1 or not team_id2 or not venue or not date_played:
+        return "Please fill in all the fields"
+
+    # Connect to the MySQL database
+    cnx = mysql.connect()
+    cursor = cnx.cursor()
+
+    # Insert the data into the matches table
+    query = "INSERT INTO matches (MatchID, TournamentID, TeamID1, TeamID2, Venue, DatePlayed) VALUES (%s, %s, %s, %s, %s, %s)"
+    cursor.execute(query, (match_id, tournament_id, team_id1, team_id2, venue, date_played))
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+    return "Match submitted successfully"
+
+@app.route('/render_fielding_analysis')    #link here to html insert nav bar
+def fielding_analysis_form():
+    return render_template('insert_fielding_analysis.html')
+
+@app.route('/submit_fielding_analysis_info',methods=['POST'])
+def submit_fielding_analysis():
+        player_id = request.form['player_id']
+        match_id = request.form['match_id']
+        team_id = request.form['team_id']
+        catches = request.form['catches']
+        stumpings = request.form['stumpings']
+        run_outs = request.form['run_outs']
+        
+        # Validate form data
+        if not player_id or not match_id or not team_id or not catches or not stumpings or not run_outs:
+            return "Please fill out all fields."
+        
+        # Insert data into MySQL database
+        cur = mysql.connect()
+        conn = cur.cursor()
+        sql = "INSERT INTO fielding_analysis (PlayerID, MatchID, TeamID, Catches, Stumpings, RunOuts) VALUES (%s, %s, %s, %s, %s, %s)"
+        conn.execute(sql, (player_id, match_id, team_id, catches, stumpings, run_outs))
+        cur.commit()
+        conn.close()
+        cur.close()
+
+        
+        return "Data successfully inserted into database."
+
+@app.route('/render_dismissals')    #link here to html insert nav bar
+def dismissals_form():
+    return render_template('insert_dismissals.html')
+
+@app.route('/submit_dismissals_info',methods=['POST'])
+def submit_dismissals():
+     # Get form data
+        MatchID = request.form['MatchID']
+        BatterID = request.form['BatterID']
+        BowlerID = request.form['BowlerID']
+        FielderID = request.form['FielderID']
+        NatureOfDismissal = request.form['NatureOfDismissal']
+
+        
+        # Validate form data
+        if not MatchID or not BatterID or not BowlerID or not FielderID or not NatureOfDismissal:
+            return "Please fill in all the fields"
+        if not str(MatchID).isdigit() or not str(BatterID).isdigit() or not str(BowlerID).isdigit() or not str(FielderID).isdigit():
+            return "MatchID, BatterID, BowlerID, FielderID should be integer"
+        # Insert data into MySQL database
+        cur = mysql.connect()
+        conn = cur.cursor()
+        sql = "INSERT INTO dismissal (MatchID, BatterID, BowlerID, FielderID,NatureOfDismissal) VALUES (%s, %s, %s, %s, %s)"
+        conn.execute(sql, (MatchID, BatterID, BowlerID, FielderID,NatureOfDismissal))
+        mysql.connect().commit()
+        conn.close()
+        cur.close()
+        
+        return "Data successfully inserted into database."
+
+@app.route('/render_batting_analysis')    #link here to html insert nav bar
+def batting_analysis_form():
+    return render_template('insert_batting_analysis.html')
+
+@app.route('/submit_batting_analysis_info',methods=['POST'])
+def submit_batting_analysis():
+     # Get form data
+        player_id = request.form['PlayerID']
+        match_id = request.form['MatchID']
+        team_id = request.form['TeamID']
+        balls_faced = request.form['BallsFaced']
+        runs_scored = request.form['RunsScored']
+        dismissal_status = request.form['DismissalStatus']
+        fours = request.form['Fours']
+        sixes = request.form['Sixes']
+        
+        # Validate form data
+        if player_id and match_id and team_id and balls_faced and runs_scored and dismissal_status and fours and sixes:
+            cur = mysql.connect()
+            conn = cur.cursor()
+            query = "INSERT INTO batting_analysis (PlayerID, MatchID, TeamID, BallsFaced, RunsScored, DismissalStatus, Fours, Sixes) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            values = (player_id, match_id, team_id, balls_faced, runs_scored, dismissal_status, fours, sixes)
+            conn.execute(query, values)
+            cur.commit()
+            conn.close()
+            cur.close()
+            return 'Data inserted successfully'
+        else:
+           return 'Please fill in all the fields'
+
+@app.route('/render_bowling_analysis')    #link here to html insert nav bar
+def bowling_analysis_form():
+    return render_template('insert_bowling_analysis.html')
+
+@app.route('/submit_bowling_analysis_info',methods=['POST'])
+def submit_bowling_analysis():
+    if request.method == 'POST':
+        player_id = request.form['PlayerID']
+        match_id = request.form['MatchID']
+        team_id = request.form['TeamID']
+        overs_bowled = request.form['OversBowled']
+        runs_conceded = request.form['RunsConceded']
+        maidens = request.form['Maidens']
+        wickets = request.form['Wickets']
+        
+        # Validate the input data
+        error = None
+        if not player_id:
+            error = 'Player ID is required'
+        elif not match_id:
+            error = 'Match ID is required'
+        elif not team_id:
+            error = 'Team ID is required'
+        elif not overs_bowled:
+            error = 'Overs Bowled is required'
+        elif not runs_conceded:
+            error = 'Runs Conceded is required'
+        elif not maidens:
+            error = 'Maidens is required'
+        elif not wickets:
+            error = 'Wickets is required'
+        if error is None:
+    
+            cur = mysql.connect()
+            conn = cur.cursor()
+            # Insert the data into the database
+            query = "INSERT INTO bowling_analysis (PlayerID, MatchID, TeamID, OversBowled, RunsConceded, Maidens, Wickets) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            values = (player_id, match_id, team_id, overs_bowled, runs_conceded, maidens, wickets)
+            conn.execute(query, values)
+            cur.commit()
+            conn.close()
+            cur.close()
+            return'Data inserted successfully'
+#######################################################################################################################################################################
+# more efficiently written code starts from here 
 
 # player 
 @app.route('/player/<int:player_id>', methods=['GET'])
@@ -212,8 +490,13 @@ def create_player():
     Player.write_to_database(conn, player)
     return jsonify({'message': 'Player created successfully'}), 201
 
-@app.route('/player/<int:player_id>', methods=['DELETE'])
-def delete_player(player_id):
+@app.route('/delete_player_render')
+def render_player():
+    return render_template('delete_player.html')
+
+@app.route('/delete_player', methods=['POST'])   #done
+def delete_player():
+    player_id = request.form['player_id']
     conn = mysql.connect()
     Player.delete_from_database(conn, player_id)
     return jsonify({'message': 'Player deleted successfully'}), 200
@@ -235,8 +518,13 @@ def create_team():
     Team.write_to_database(conn, team)
     return jsonify({'message': 'Team created successfully'}), 201
 
-@app.route('/team/<int:team_id>', methods=['DELETE'])
-def delete_team(team_id):
+@app.route('/delete_team_render')
+def render_team():
+    return render_template('delete_teams.html')
+
+@app.route('/delete_team', methods=['POST'])   #done
+def delete_team():
+    team_id = request.form['team_id']
     conn = mysql.connect()
     Team.delete_from_database(conn, team_id)
     return jsonify({'message': 'Team deleted successfully'}), 200
@@ -258,8 +546,13 @@ def create_tournament():
     Tournament.write_to_database(conn, tournament)
     return jsonify({'message': 'Tournament created successfully'}), 201
 
-@app.route('/tournament/<int:tournament_id>', methods=['DELETE'])
-def delete_tournament(tournament_id):
+@app.route('/delete_tournament_render')
+def render_delete_tournament():
+    return render_template('delete_tournament.html')
+
+@app.route('/delete_tournament', methods=['POST']) #done
+def delete_tournament():
+    tournament_id = request.form['tournament_id']
     conn = mysql.connect()
     Tournament.delete_from_database(conn, tournament_id)
     return jsonify({'message': 'Tournament deleted successfully'}), 200
@@ -283,8 +576,15 @@ def create_match():
     resp.status_code = 201
     return resp
 
-@app.route('/matches/<int:match_id>', methods=['DELETE'])
-def delete_match(match_id):
+@app.route('/delete_matches_render')
+def render_delete_matches():
+    return render_template('delete_matches.html')
+
+
+
+@app.route('/delete_matches', methods=['POST']) #done
+def delete_match():
+    match_id = request.form['match_id']
     conn = mysql.connect()
     Match.delete_from_database(conn, match_id)
     resp = jsonify({'message': 'Match deleted successfully'})
@@ -311,8 +611,15 @@ def create_batting_analysis():
     resp.status_code = 200
     return resp
 
-@app.route('/batting_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE'])
-def delete_batting_analysis(player_id, match_id, team_id):
+@app.route('/delete_batting_analysis_render')
+def render_delete_battinng_analysis():
+    return render_template('delete_batting_analysis.html')
+
+@app.route('/delete_batting_analysis', methods=['POST']) #done
+def delete_batting_analysis():
+    player_id = request.form['player_id']
+    match_id =  request.form['match_id']
+    team_id = request.form['team_id']
     conn = mysql.connect()
     BattingAnalysis.delete_from_database(conn,player_id, match_id, team_id)
     resp = jsonify({'message': 'Batting analysis deleted successfully'})
@@ -338,8 +645,15 @@ def create_bowling_analysis():
     resp.status_code = 201
     return resp
 
-@app.route('/bowling_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE'])
-def delete_bowling_analysis(player_id, match_id, team_id):
+@app.route('/delete_bowling_analysis_render')
+def render_delete_bowling_analysis():
+    return render_template('delete_bowling_analysis.html')
+
+@app.route('/delete_bowling_analysis', methods=['POST']) #done
+def delete_bowling_analysis():
+    player_id = request.form['player_id']
+    match_id= request.form['match_id']
+    team_id=request.form['team_id']
     conn = mysql.connect()
     BowlingAnalysis.delete_from_database(conn, player_id, match_id, team_id)
     resp = jsonify({'message': 'Bowling analysis deleted successfully'})
@@ -365,8 +679,15 @@ def create_fielding_analysis():
     resp.status_code = 201
     return resp
 
-@app.route('/fielding_analysis/<int:player_id>/<int:match_id>/<int:team_id>', methods=['DELETE'])
-def delete_fielding_analysis(player_id, match_id, team_id):
+@app.route('/delete_fielding_analysis_render')
+def render_delete_fielding_analysis():
+    return render_template('delete_fielding_analysis.html')
+
+@app.route('/delete_fielding_analysis', methods=['POST']) #done
+def delete_fielding_analysis():
+    player_id = request.form['player_id']
+    match_id = request.form['match_id']
+    team_id = request.form['team_id']
     conn = mysql.connect()
     FieldingAnalysis.delete_from_database(conn, player_id, match_id, team_id)
     resp = jsonify({'message': 'Fielding analysis deleted successfully'})
@@ -392,14 +713,21 @@ def create_dismissal():
     resp.status_code = 201
     return resp
 
-@app.route('/dismissals/<int:match_id>/<int:batter_id>', methods=['DELETE'])
-def delete_dismissal(match_id, batter_id):
+@app.route('/delete_dismissals_render')
+def render_delete_dismissal():
+    return render_template('delete_dismissals.html')
+
+@app.route('/delete_dismissals', methods=['POST'])#done
+def delete_dismissal():
+    match_id = request.form['match_id']
+    batter_id = request.form['batter_id']
     conn = mysql.connect()
     Dismissal.delete_from_database(conn, match_id, batter_id)
     resp = jsonify({'message': 'Dismissal deleted successfully'})
     resp.status_code = 200
     return resp
-
+###################################################################################################
+#generates summaries 
 @app.route('/player_fielding_summary/<int:player_id>', methods=['GET'])
 def get_player_fielding_summary(player_id):
     conn = mysql.connect()

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Tournament Form </title>
+    <style>
+        form {
+        width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid rgb(6, 0, 0);
+        border-radius: 4px;
+      }
+
+      /* Form input field styling */
+      input[type="text"],
+      input[type="date"],
+      select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid rgb(4, 0, 0);
+        border-radius: 4px;
+      }
+
+      /* Form label styling */
+      label {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      /* Form error message styling */
+      .error {
+        color: red;
+        margin-top: 8px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <form id="tournament-form" method="post" action="/submit_tournament_info">
+        <div class="form-group">
+          <label for="TournamentID">TournamentID</label>
+          <input type="number" id="TournamentID" name="TournamentID" required>
+        </div>
+        <div class="form-group">
+          <label for="TournamentName">TournamentName</label>
+          <input type="text" id="TournamentName" name="TournamentName" required>
+        </div>
+        <div class="form-group">
+          <label for="StartYear">StartYear</label>
+          <input type="number" id="StartYear" name="StartYear" required>
+        </div>
+        <div class="form-group">
+          <label for="Grade">Grade</label>
+          <input type="text" id="Grade" name="Grade" required>
+        </div>
+        <div class="form-group">
+          <label for="EndYear">EndYear</label>
+          <input type="number" id="EndYear" name="EndYear" required>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Submit">
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

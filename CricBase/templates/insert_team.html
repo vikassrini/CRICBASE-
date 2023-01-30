@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Team Form</title>
+    <style>
+      /* CSS styles for form beautification */
+      form {
+        width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      /* Form input field styling */
+      input[type="text"],
+      input[type="date"],
+      select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      /* Form label styling */
+      label {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      /* Form error message styling */
+      .error {
+        color: red;
+        margin-top: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="team-form" action="/submit_team_info" method="post" enctype="multipart/form-data">
+      <label for="teamID">Team ID:</label>
+      <input type="text" id="teamID" name="TeamID" required>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="Name" required>
+      <label for="division">Division:</label>
+      <select id="division" name="Division" required>
+        <option value=""></option>
+        <option value="Division 1">Division 1</option>
+        <option value="Division 2">Division 2</option>
+        <option value="Division 3">Division 3</option>
+        <option value="Division 4">Division 2</option>
+        <option value="Division 5">Division 3</option>
+      </select>
+      <label for="grade">Grade:</label>
+      <input type="text" id="grade" name="Grade" required>
+      <input type="submit" value="Submit">
+    </form>
+  <script>
+  // JavaScript for form validation
+  const form = document.getElementById("team-form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let teamID = document.getElementById("teamID").value;
+    let name = document.getElementById("name").value;
+    let division = document.getElementById("division").value;
+    let grade = document.getElementById("grade").value;
+    if (!teamID.match(/^\d+$/)) {
+      alert("Team ID should be a number");
+    } else if (name.length === 0) {
+      alert("Please enter a name");
+    } else if (division.length === 0) {
+      alert("Please select a division");
+    } else if (grade.length === 0) {
+      alert("Please enter a grade");
+    } else {
+      form.submit();
+    }
+});
+</script>
+
+  </body>
+</html>
