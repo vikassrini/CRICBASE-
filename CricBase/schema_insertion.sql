@@ -241,13 +241,10 @@ BEGIN
 END $$
 
 
-
-/*'PLayerID','FName','LName','TeamID','Matches','Innings','Runs','Average',
-'StrikeRate','Overs','RunsConceded','Wickets','Maidens','BowlingAverage','BowlingStrikeRate','Catches','RunOuts','Stumpings' */
 CREATE PROCEDURE getSummary(IN player_id INT)
 BEGIN
     SELECT p.PlayerID, p.FName, p.LName, p.TeamID,
-    bs.Matches, bs.Innings, bs.Runs, bs.Average, bs.StrikeRate,
+    bs.Matches, bs.Innings, bs.Runs, bs.Balls, bs.Average, bs.StrikeRate,
     bw.Overs, bw.RunsConceded, bw.Wickets, bw.Maidens, bw.BowlingAverage, bw.BowlingStrikeRate,
     fs.Catches, fs.Stumpings, fs.RunOuts
     FROM PLAYER p
